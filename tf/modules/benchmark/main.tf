@@ -1,8 +1,15 @@
-# Datasets.
-resource "google_bigquery_dataset" "benchmark" {
+locals {
+  dataset_filepath = "../bigquery/datasets/benchmark"
+  tables_filepath  = "${local.dataset_filepath}/tables"
+  views_filepath   = "${local.dataset_filepath}/views"
+}
+
+
+resource "google_bigquery_dataset" "dataset" {
   dataset_id    = "benchmark"
   friendly_name = "benchmark"
   description   = "Stores configuration and results of benchmarking matches between agents."
+  project       = var.project_id
   location      = var.location
 
   access {
@@ -17,82 +24,82 @@ resource "google_bigquery_dataset" "benchmark" {
 }
 
 # Tables
-resource "google_bigquery_table" "benchmark__matches" {
-  dataset_id = "benchmark"
+resource "google_bigquery_table" "table__matches" {
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "matches"
-  schema     = file("../bigquery/datasets/benchmark/tables/matches.json")
+  schema     = file("${local.tables_filepath}/matches.json")
 }
 
-resource "google_bigquery_table" "bechmark__actions" {
-  dataset_id = "benchmark"
+resource "google_bigquery_table" "table__actions" {
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "actions"
-  schema     = file("../bigquery/datasets/benchmark/tables/actions.json")
+  schema     = file("${local.tables_filepath}/actions.json")
 }
 
 resource "google_bigquery_table" "benchmark__boards" {
-  dataset_id = "benchmark"
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "boards"
-  schema     = file("../bigquery/datasets/benchmark/tables/boards.json")
+  schema     = file("${local.tables_filepath}/boards.json")
 }
 
 resource "google_bigquery_table" "benchmark__units" {
-  dataset_id = "benchmark"
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "units"
-  schema     = file("../bigquery/datasets/benchmark/tables/units.json")
+  schema     = file("${local.tables_filepath}/units.json")
 }
 
 resource "google_bigquery_table" "benchmark__players" {
-  dataset_id = "benchmark"
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "players"
-  schema     = file("../bigquery/datasets/benchmark/tables/players.json")
+  schema     = file("${local.tables_filepath}/players.json")
 }
 
 # Views
 resource "google_bigquery_table" "benchmark__units_created_deleted_at" {
-  dataset_id = "benchmark"
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "_units_created_deleted_at"
   view {
-    query          = file("../bigquery/datasets/benchmark/views/_units_created_deleted_at.sql")
+    query          = file("${local.views_filepath}/_units_created_deleted_at.sql")
     use_legacy_sql = false
   }
 }
 
 
 resource "google_bigquery_table" "benchmark__matches_agent_player_index" {
-  dataset_id = "benchmark"
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "_matches_agent_player_index"
   view {
-    query          = file("../bigquery/datasets/benchmark/views/_matches_agent_player_index.sql")
+    query          = file("${local.views_filepath}//_matches_agent_player_index.sql")
     use_legacy_sql = false
   }
 }
 
 
 resource "google_bigquery_table" "benchmark__units_actions" {
-  dataset_id = "benchmark"
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "_units_actions"
   view {
-    query          = file("../bigquery/datasets/benchmark/views/_units_actions.sql")
+    query          = file("${local.views_filepath}/_units_actions.sql")
     use_legacy_sql = false
   }
 }
 
 
 resource "google_bigquery_table" "benchmark__ships_true_action" {
-  dataset_id = "benchmark"
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "_ships_true_action"
   view {
-    query          = file("../bigquery/datasets/benchmark/views/_ships_true_action.sql")
+    query          = file("${local.views_filepath}/_ships_true_action.sql")
     use_legacy_sql = false
   }
 }
 
 
 resource "google_bigquery_table" "benchmark__shipyards_true_action" {
-  dataset_id = "benchmark"
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "_shipyards_true_action"
   view {
-    query          = file("../bigquery/datasets/benchmark/views/_shipyards_true_action.sql")
+    query          = file("${local.views_filepath}/_shipyards_true_action.sql")
     use_legacy_sql = false
   }
 }
@@ -102,62 +109,38 @@ resource "google_bigquery_table" "benchmark__true_actions" {
   dataset_id = "benchmark"
   table_id   = "_true_actions"
   view {
-    query          = file("../bigquery/datasets/benchmark/views/_true_actions.sql")
+    query          = file("${local.views_filepath}/_true_actions.sql")
     use_legacy_sql = false
   }
 }
 
 
 resource "google_bigquery_table" "benchmark__matches_result" {
-  dataset_id = "benchmark"
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "_matches_result"
   view {
-    query          = file("../bigquery/datasets/benchmark/views/_matches_result.sql")
+    query          = file("${local.views_filepath}/_matches_result.sql")
     use_legacy_sql = false
   }
 }
 
 
 resource "google_bigquery_table" "benchmark__matches_rank" {
-  dataset_id = "benchmark"
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "_matches_rank"
   view {
-    query          = file("../bigquery/datasets/benchmark/views/_matches_rank.sql")
+    query          = file("${local.views_filepath}/_matches_rank.sql")
     use_legacy_sql = false
   }
 }
-
 
 resource "google_bigquery_table" "benchmark__matches_overview" {
-  dataset_id = "benchmark"
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "_matches_overview"
   view {
-    query          = file("../bigquery/datasets/benchmark/views/_matches_overview.sql")
+    query          = file("${local.views_filepath}/_matches_overview.sql")
     use_legacy_sql = false
   }
-}
-
-# Topics.
-resource "google_pubsub_topic" "topic__leaderboard_request" {
-  name = "leaderboard-request"
-}
-
-resource "google_pubsub_topic" "topic__leaderboard" {
-  name = "leaderboard"
-}
-
-resource "google_pubsub_topic" "topic__match_request" {
-  name = "match-request"
-}
-
-resource "google_pubsub_topic" "topic__match" {
-  name = "match"
-}
-
-# Functions.
-resource "google_storage_bucket" "archive_bucket" {
-  name     = "functions-archive"
-  location = var.location
 }
 
 module "function_match_to_bigquery" {
@@ -166,8 +149,8 @@ module "function_match_to_bigquery" {
   source_dir       = "../functions/match-to-bigquery"
   func_description = "Reads a match from a PubSub message and inserts it to BigQuery."
   topic_name       = "match"
-  project_name     = data.google_project.kaggle_halite.project_id
-  bucket_name      = google_storage_bucket.archive_bucket.name
+  project_name     = var.project_id
+  bucket_name      = var.bucket_name
 }
 
 module "function_match_to_storage" {
@@ -176,6 +159,6 @@ module "function_match_to_storage" {
   source_dir       = "../functions/match-to-storage"
   func_description = "Reads a match from a PubSub message and dumps it in Cloud Storage."
   topic_name       = "match"
-  project_name     = data.google_project.kaggle_halite.project_id
-  bucket_name      = google_storage_bucket.archive_bucket.name
+  project_name     = var.project_id
+  bucket_name      = var.bucket_name
 }

@@ -191,9 +191,9 @@ module "function_match_to_storage" {
 module "leaderboard" {
   source = "./modules/leaderboard"
 
-  location = var.location
-  project_id = data.google_project.kaggle_halite.project_id
-  bucket_name = google_storage_bucket.archive_bucket.name
+  location        = var.location
+  project_id      = data.google_project.kaggle_halite.project_id
+  bucket_name     = google_storage_bucket.archive_bucket.name
   kaggle_username = var.kaggle_username
-  kaggle_key = var.kaggle_key
+  kaggle_key      = var.kaggle_key
 }
