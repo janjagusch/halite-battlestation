@@ -35,8 +35,6 @@ TAGS = []
 # -
 
 random.seed(SEED)
-
-random.seed(SEED)
 env = make("halite")
 _ = env.reset(num_agents=len(AGENTS))
 
