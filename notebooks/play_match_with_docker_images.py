@@ -42,16 +42,16 @@ _ = env.reset(num_agents=len(AGENTS))
 
 
 # +
-class Code:
+class _Code:
     
     def __init__(self, co_argcount):
         self.co_argcount = co_argcount
         
-class act:
+class RequestAgent:
     
     def __init__(self, url):
         self._url = url
-        self.__code__ = Code(2)
+        self.__code__ = _Code(2)
         
     def __call__(self, observation, configuration):
         data = {"observation": observation, "configuration": configuration}
@@ -79,7 +79,7 @@ def host_port(container):
 containers = [client.containers.run(agent, detach=True, ports={80: free_tcp_port()}) for i, agent in enumerate(AGENTS)]
 # -
 
-acts = [act(f"http://localhost:{host_port(container)}/act") for container in containers]
+acts = [RequestAgent(f"http://localhost:{host_port(container)}/act") for container in containers]
 
 _ = env.run(copy(acts))
 
