@@ -2,7 +2,7 @@
 
 ## 0.3.0
 
-- The `to_topic` function does not until all messages are published anymore. Instead, it returns the future objects.
+- The `to_topic` function does not wait until all messages are published anymore. Instead, it returns the future objects.
 
 ## 0.2.4
 
