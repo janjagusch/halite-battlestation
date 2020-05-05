@@ -22,7 +22,7 @@ def _actions_table(env):
     def yield_actions(env):
         for step, players in enumerate(env["steps"]):
             for player in players:
-                for unit_id, action in player["action"].items():
+                for unit_id, action in (player["action"] or {}).items():
                     yield {"step": step, "unit_id": unit_id, "action": action}
 
     def transform(**kwargs):
