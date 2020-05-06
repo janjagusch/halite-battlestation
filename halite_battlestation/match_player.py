@@ -10,6 +10,7 @@ import warnings
 
 
 from cloud_functions_utils import decode, error_reporting, to_topic
+from google.api_core.exceptions import DeadlineExceeded, InvalidArgument
 from google.cloud import pubsub_v1
 from google.cloud.pubsub_v1.gapic.publisher_client_config import config
 from kaggle_environments import make
@@ -28,13 +29,13 @@ def _publisher_config():
     # also to account for my tv cable upload speed :shit:
     config["interfaces"]["google.pubsub.v1.Publisher"]["retry_params"]["messaging"][
         "initial_rpc_timeout_millis"
-    ] = 60000
+    ] = 600000
     config["interfaces"]["google.pubsub.v1.Publisher"]["retry_params"]["messaging"][
         "rpc_timeout_multiplier"
     ] = 1.0
     config["interfaces"]["google.pubsub.v1.Publisher"]["retry_params"]["messaging"][
         "max_rpc_timeout_millis"
-    ] = 600000
+    ] = 6000000
 
 
 class _Code:
@@ -113,7 +114,7 @@ def _main(agents, configuration, seed, tags=None):
     print("Playing match...")
     _play_match(agents, env)
     payload = _make_payload(env, agents, seed, tags)
-    print(f"Publising match '{env.id}'...")
+    print(f"Publishing match '{env.id}'...")
     return to_topic([payload], topic=TOPIC_NAME, b64encode=False)
 
 
@@ -139,10 +140,15 @@ def subscribe():
 
     with subscriber:
         try:
-            streaming_pull_future.result(timeout=TIMEOUT)
-        except Exception as error:
+            while True:
+                try:
+                    streaming_pull_future.result(timeout=TIMEOUT)
+                except (DeadlineExceeded, InvalidArgument) as error:
+                    print(f"{error.__class__.__name__} occured.")
+                    streaming_pull_future.cancel()
+        except KeyboardInterrupt:
+            print("Interrupted by user.")
             streaming_pull_future.cancel()
-            raise error
 
 
 if __name__ == "__main__":
