@@ -138,17 +138,21 @@ def subscribe():
         SUBSCRIPTION_NAME, callback=callback, flow_control=flow_control
     )
 
-    with subscriber:
-        try:
-            while True:
+    try:
+        while True:
+            with pubsub_v1.SubscriberClient() as subscriber:
+                flow_control = pubsub_v1.types.FlowControl(max_messages=MAX_MESSAGES)
+                streaming_pull_future = subscriber.subscribe(
+                    SUBSCRIPTION_NAME, callback=callback, flow_control=flow_control
+                )
                 try:
                     streaming_pull_future.result(timeout=TIMEOUT)
                 except (DeadlineExceeded, InvalidArgument) as error:
                     print(f"{error.__class__.__name__} occured.")
                     streaming_pull_future.cancel()
-        except KeyboardInterrupt:
-            print("Interrupted by user.")
-            streaming_pull_future.cancel()
+    except KeyboardInterrupt:
+        print("Interrupted by user.")
+        streaming_pull_future.cancel()
 
 
 if __name__ == "__main__":
