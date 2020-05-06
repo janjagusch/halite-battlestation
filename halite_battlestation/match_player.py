@@ -11,6 +11,7 @@ import warnings
 
 from cloud_functions_utils import decode, error_reporting, to_topic
 from google.cloud import pubsub_v1
+from google.cloud.pubsub_v1.gapic.publisher_client_config import config
 from kaggle_environments import make
 import docker
 import requests
@@ -20,6 +21,20 @@ SUBSCRIPTION_NAME = "projects/kaggle-halite/subscriptions/match-play"
 TOPIC_NAME = "projects/kaggle-halite/topics/match"
 TIMEOUT = 600
 MAX_MESSAGES = 2
+
+
+def _publisher_config():
+    # https://github.com/googleapis/python-pubsub/issues/7#issuecomment-603092768
+    # also to account for my tv cable upload speed :shit:
+    config["interfaces"]["google.pubsub.v1.Publisher"]["retry_params"]["messaging"][
+        "initial_rpc_timeout_millis"
+    ] = 60000
+    config["interfaces"]["google.pubsub.v1.Publisher"]["retry_params"]["messaging"][
+        "rpc_timeout_multiplier"
+    ] = 1.0
+    config["interfaces"]["google.pubsub.v1.Publisher"]["retry_params"]["messaging"][
+        "max_rpc_timeout_millis"
+    ] = 600000
 
 
 class _Code:
