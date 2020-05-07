@@ -4,13 +4,13 @@ Pull subscriber to Google PubSub subscription that plays matches.
 
 from contextlib import contextmanager
 from copy import copy
+import os
 import random
 import socket
 import warnings
 
 
 from cloud_functions_utils import decode, error_reporting, to_topic
-from google.api_core.exceptions import DeadlineExceeded, InvalidArgument
 from google.cloud import pubsub_v1
 from google.cloud.pubsub_v1.gapic.publisher_client_config import config
 from kaggle_environments import make
@@ -20,8 +20,8 @@ import requests
 
 SUBSCRIPTION_NAME = "projects/kaggle-halite/subscriptions/match-play"
 TOPIC_NAME = "projects/kaggle-halite/topics/match"
-TIMEOUT = 600
-MAX_MESSAGES = 2
+TIMEOUT = None
+MAX_MESSAGES = int(os.environ.get("MAX_MESSAGES", 1))
 
 
 def _publisher_config():
@@ -29,13 +29,13 @@ def _publisher_config():
     # also to account for my tv cable upload speed :shit:
     config["interfaces"]["google.pubsub.v1.Publisher"]["retry_params"]["messaging"][
         "initial_rpc_timeout_millis"
-    ] = 600000
+    ] = 60_000
     config["interfaces"]["google.pubsub.v1.Publisher"]["retry_params"]["messaging"][
         "rpc_timeout_multiplier"
     ] = 1.0
     config["interfaces"]["google.pubsub.v1.Publisher"]["retry_params"]["messaging"][
         "max_rpc_timeout_millis"
-    ] = 6000000
+    ] = 60_000
 
 
 class _Code:
@@ -115,7 +115,8 @@ def _main(agents, configuration, seed, tags=None):
     _play_match(agents, env)
     payload = _make_payload(env, agents, seed, tags)
     print(f"Publishing match '{env.id}'...")
-    return to_topic([payload], topic=TOPIC_NAME, b64encode=False)
+    future = to_topic([payload], topic=TOPIC_NAME, b64encode=False)[0]
+    future.result()
 
 
 def subscribe():
@@ -123,6 +124,7 @@ def subscribe():
     Subscribes to a Google PubSub subscription, plays a match and publishes the match
     to a PubSub topic.
     """
+
     subscriber = pubsub_v1.SubscriberClient()
 
     @error_reporting
@@ -134,25 +136,18 @@ def subscribe():
         print("Done.")
 
     flow_control = pubsub_v1.types.FlowControl(max_messages=MAX_MESSAGES)
+
     streaming_pull_future = subscriber.subscribe(
         SUBSCRIPTION_NAME, callback=callback, flow_control=flow_control
     )
+    print(f"Listening for messages on {SUBSCRIPTION_NAME}...")
 
-    try:
-        while True:
-            with pubsub_v1.SubscriberClient() as subscriber:
-                flow_control = pubsub_v1.types.FlowControl(max_messages=MAX_MESSAGES)
-                streaming_pull_future = subscriber.subscribe(
-                    SUBSCRIPTION_NAME, callback=callback, flow_control=flow_control
-                )
-                try:
-                    streaming_pull_future.result(timeout=TIMEOUT)
-                except (DeadlineExceeded, InvalidArgument) as error:
-                    print(f"{error.__class__.__name__} occured.")
-                    streaming_pull_future.cancel()
-    except KeyboardInterrupt:
-        print("Interrupted by user.")
-        streaming_pull_future.cancel()
+    with subscriber:
+        try:
+            streaming_pull_future.result(timeout=TIMEOUT)
+        except Exception as error:
+            streaming_pull_future.cancel()
+            raise error
 
 
 if __name__ == "__main__":
