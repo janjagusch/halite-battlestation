@@ -54,6 +54,41 @@ resource "google_bigquery_table" "benchmark__players" {
 }
 
 # Views
+module "view_matches_latest" {
+  source = "../bigquery_view"
+
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "_matches_latest"
+}
+
+module "view_players_latest" {
+  source = "../bigquery_view"
+
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "_players_latest"
+}
+
+module "view_boards_latest" {
+  source = "../bigquery_view"
+
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "_boards_latest"
+}
+
+module "view_units_latest" {
+  source = "../bigquery_view"
+
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "_units_latest"
+}
+
+module "view_actions_latest" {
+  source = "../bigquery_view"
+
+  dataset_id = google_bigquery_dataset.dataset.dataset_id
+  table_id   = "_actions_latest"
+}
+
 module "view_units_created_deleted_at" {
   source = "../bigquery_view"
 
