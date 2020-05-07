@@ -41,6 +41,11 @@ def to_topic(messages, topic=None, b64encode=False):
             `os.environ["GCF_UTILS_PUBSUB_TOPIC"]`.
         b64encode (bool, optional): Whether to base64 encode the messages.
             This is done automatically for Google Cloud Functions.
+
+    Returns:
+        list[google.cloud.pubsub_v1.publisher.futures.Future]: List of futures.
+            You can wait for all messages to be published by calling the `.result()`
+            method on each item in the list.
     """
     # pylint: disable=import-outside-toplevel
     from google.cloud import pubsub_v1
