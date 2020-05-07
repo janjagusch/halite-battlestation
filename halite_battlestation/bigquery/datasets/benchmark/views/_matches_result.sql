@@ -8,7 +8,7 @@ FROM (
     SELECT
         *,
         row_number() OVER (PARTITION BY match_id, player_index ORDER BY step DESC) AS row_number
-    FROM `kaggle-halite.benchmark.players`
+    FROM `kaggle-halite.benchmark._players_latest`
 )
 WHERE row_number = 1
 ORDER BY match_id, player_index;

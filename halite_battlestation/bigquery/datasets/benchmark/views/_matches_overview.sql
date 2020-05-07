@@ -1,6 +1,6 @@
 SELECT
   agents.match_id,
-  agents.agent,
+  agents,
   results.halite,
   ranks.rank,
   matches.configuration,
@@ -14,5 +14,5 @@ AND agents.player_index = results.player_index
 LEFT JOIN `kaggle-halite.benchmark._matches_rank` AS ranks
 ON agents.match_id = ranks.match_id 
 AND agents.player_index = ranks.player_index
-LEFT JOIN `kaggle-halite.benchmark.matches` AS matches
+LEFT JOIN `kaggle-halite.benchmark._matches_latest` AS matches
 ON agents.match_id = matches.match_id

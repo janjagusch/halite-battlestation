@@ -27,7 +27,7 @@ FROM (
   ) AS ship_actions
   LEFT JOIN (
     SELECT *
-    FROM `kaggle-halite.benchmark.units` 
+    FROM `kaggle-halite.benchmark._units_latest` 
     WHERE unit_type = "shipyard"
   ) AS shipyards
   ON ship_actions.match_id = shipyards.match_id
