@@ -25,6 +25,8 @@
 
 ## Running the Script
 
+Optionally: Set then environment variable `MAX_MESSAGES` to define the maximum number of outstanding messages for the worker. If not set, defaults to 1. More information [here](https://cloud.google.com/pubsub/docs/pull#config).
+
 * Start the `match_player.py` script:
 
     ```sh
