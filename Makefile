@@ -25,9 +25,7 @@ lint_black:
 
 lint_pylint:
 	@echo "Pylint linting ..."
-	@poetry run pylint $$(find \( -name "*.py" \) -not \( -path "./.venv/*" -o -path "./.tox/*" -o -path "*/**/.venv/*" \))
-	@poetry run pylint $$(find tests/ -iname "*.py")
-	@poetry run pylint $$(find bin/ -iname "*.py")
+	@poetry run pylint $$(find \( -name "*.py" \) -not \( -path "./.venv/*" -o -path "./.tox/*" -o -path "*/**/.venv/*" -o -path "./notebooks/*" \))
 
 lint_prettier:
 	@echo "Prettier linting ..."
