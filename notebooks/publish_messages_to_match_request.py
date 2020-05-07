@@ -13,7 +13,18 @@
 #     name: halite-battlestation
 # ---
 
+# +
+from google.cloud import pubsub_v1
+
+# pylint: enable=import-outside-toplevel
+
+publisher = pubsub_v1.PublisherClient()
+# -
+
+publisher.publish()
+
 from cloud_functions_utils import to_topic
+from kaggle_environments import make
 
 # +
 AGENTS = [
@@ -30,10 +41,9 @@ SEED = 42
 TAGS = []
 # -
 
-messages = [{
-    "agents": AGENTS,
-    "configuration": CONFIGURATION,
-    "seed": i,
-    "tags": TAGS} for i in range(100)]
+messages = [
+    {"agents": AGENTS, "configuration": CONFIGURATION, "seed": i, "tags": TAGS}
+    for i in range(100)
+]
 
 to_topic(messages, "projects/kaggle-halite/topics/match-request", b64encode=False)
