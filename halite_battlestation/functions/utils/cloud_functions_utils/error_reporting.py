@@ -7,7 +7,6 @@ from google.cloud.error_reporting import Client
 
 # pylint: disable=invalid-name
 class error_reporting:
-    # pylint: enable=invalid-name
     """
     This class serves as a decorator to report errors to Google Cloud.
 
@@ -25,3 +24,6 @@ class error_reporting:
         except Exception as error:
             self._client.report_exception()
             raise error
+
+
+# pylint: enable=invalid-name
