@@ -175,6 +175,10 @@ requests = ">=2.18.0,<3.0.0dev"
 setuptools = ">=34.0.0"
 six = ">=1.10.0"
 
+[package.dependencies.grpcio]
+optional = true
+version = ">=1.8.2,<2.0dev"
+
 [package.extras]
 grpc = ["grpcio (>=1.8.2,<2.0dev)"]
 grpcgcp = ["grpcio-gcp (>=0.2.2)"]
@@ -311,6 +315,10 @@ version = "1.51.0"
 
 [package.dependencies]
 protobuf = ">=3.6.0"
+
+[package.dependencies.grpcio]
+optional = true
+version = ">=1.0.0"
 
 [package.extras]
 grpc = ["grpcio (>=1.0.0)"]
@@ -527,13 +535,13 @@ description = "Kaggle Environments"
 name = "kaggle-environments"
 optional = false
 python-versions = ">=3.6"
-version = "0.2.3"
+version = "0.2.4jjagusch"
 
 [package.dependencies]
 jsonschema = ">=3.0.1"
 
 [package.source]
-reference = "47c40f174af2c2203d3c438611466f0d644327f0"
+reference = "a15deb694c765630f56f474ac20a85268fdf6290"
 type = "git"
 url = "https://github.com/janjagusch/kaggle-environments.git"
 [[package]]
@@ -895,7 +903,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "49e2ad231945b0764a3c1f46847d84321981473d74124353d7c3c16fffc47680"
+content-hash = "1c520b7e7cd001834cc553dbb50c8b2c6c3847dd6f8a14fe5f7f2873886b26fb"
 python-versions = "^3.7"
 
 [metadata.files]

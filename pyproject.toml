@@ -18,7 +18,7 @@ google-cloud-pubsub = "^1.4.3"
 google-cloud-storage = "^1.28.0"
 ipykernel = "^5.2.1"
 kaggle = "^1.5.6"
-kaggle-environments = {git = "https://github.com/janjagusch/kaggle-environments.git", rev = "make-work-with-poetry"}
+kaggle-environments = {git = "https://github.com/janjagusch/kaggle-environments.git", branch = "make-work-with-poetry"}
 pylint = "^2.5.0"
 
 [build-system]
