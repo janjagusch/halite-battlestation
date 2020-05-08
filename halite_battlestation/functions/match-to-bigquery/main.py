@@ -116,12 +116,12 @@ def _units_table(env):
     return [transform(**kwargs) for kwargs in yield_units(env)]
 
 
-def _matches_table(env, agents, seed, tags=None):
+def _matches_table(env, version, agents, seed, tags=None):
 
     return {
         "match_id": env["id"],
         "name": env["name"],
-        "version": env["version"],
+        "version": version,
         "agents": agents,
         "configuration": {
             camel_to_snake(key): value for key, value in env["configuration"].items()
@@ -140,12 +140,9 @@ def main(event, context):
     """
     data = decode(event["data"])
     env = data["env"]
-    agents = data["agents"]
-    seed = data["seed"]
-    tags = data["tags"]
 
     print("Transforming tables...")
-    match = _matches_table(env, agents, seed, tags)
+    match = _matches_table(**data)
     actions = _actions_table(env)
     boards = _board_table(env)
     players = _players_table(env)
