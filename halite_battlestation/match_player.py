@@ -4,6 +4,7 @@ Pull subscriber to Google PubSub subscription that plays matches.
 
 from contextlib import contextmanager
 from copy import copy
+import concurrent
 import os
 import pkg_resources
 import random
@@ -140,8 +141,6 @@ def subscribe():
     to a PubSub topic.
     """
 
-    subscriber = pubsub_v1.SubscriberClient()
-
     @error_reporting
     def callback(message):
         print("Message received.")
@@ -150,11 +149,19 @@ def subscribe():
         message.ack()
         print("Done.")
 
+    # https://github.com/googleapis/google-cloud-python/issues/7677#issuecomment-493850089
+    subscriber = pubsub_v1.SubscriberClient()
     flow_control = pubsub_v1.types.FlowControl(max_messages=MAX_MESSAGES)
+    custom_executor = concurrent.futures.ThreadPoolExecutor(max_workers=MAX_MESSAGES)
+    custom_scheduler = pubsub_v1.subscriber.scheduler.ThreadScheduler(custom_executor)
 
     streaming_pull_future = subscriber.subscribe(
-        SUBSCRIPTION_NAME, callback=callback, flow_control=flow_control
+        SUBSCRIPTION_NAME,
+        flow_control=flow_control,
+        callback=callback,
+        scheduler=custom_scheduler,
     )
+
     print(f"Listening for messages on {SUBSCRIPTION_NAME}...")
 
     with subscriber:
