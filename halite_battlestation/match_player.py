@@ -5,6 +5,7 @@ Pull subscriber to Google PubSub subscription that plays matches.
 from contextlib import contextmanager
 from copy import copy
 import os
+import pkg_resources
 import random
 import socket
 import warnings
@@ -99,21 +100,35 @@ def _play_match(agents, env):
         return env
 
 
-def _make_payload(env, agents, seed, tags):
+def _make_payload(env, version, agents, seed, tags):
     return {
         "env": env.toJSON(),
+        "version": version,
         "agents": agents,
         "seed": seed,
         "tags": tags,
     }
 
 
+def _yield_dist_infos():
+    for dist_info in pkg_resources.working_set:
+        yield dist_info
+
+
+def _dist_info(project_name):
+    for dist_info in _yield_dist_infos():
+        if dist_info.project_name == project_name:
+            return dist_info
+    raise RuntimeError(f"No distribution with project name '{project_name}' found.")
+
+
 def _main(agents, configuration, seed, tags=None):
     tags = tags or []
     env = _make_env(len(agents), configuration, seed)
+    version = _dist_info("kaggle-environments").version
     print("Playing match...")
     _play_match(agents, env)
-    payload = _make_payload(env, agents, seed, tags)
+    payload = _make_payload(env, version, agents, seed, tags)
     print(f"Publishing match '{env.id}'...")
     future = to_topic([payload], topic=TOPIC_NAME, b64encode=False)[0]
     future.result()
