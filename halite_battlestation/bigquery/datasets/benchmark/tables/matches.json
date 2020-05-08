@@ -5,6 +5,11 @@
     "mode": "REQUIRED"
   },
   {
+    "name": "version",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
     "name": "agents",
     "type": "STRING",
     "mode": "REPEATED",
