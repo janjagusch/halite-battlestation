@@ -8,7 +8,7 @@ An analytics cockpit for the Halite competition on Kaggle.
 ```sh
 git@github.com:janjagusch/halite-battlestation.git
 ```
-1. Create the virtual environment and install the dependencies:
+2. Create the virtual environment and install the dependencies:
 ```sh
 poetry install
 ```
