@@ -280,7 +280,7 @@ description = "Google Cloud Storage API client library"
 name = "google-cloud-storage"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
-version = "1.28.1"
+version = "1.29.0"
 
 [package.dependencies]
 google-auth = ">=1.11.0,<2.0dev"
@@ -896,7 +896,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "9dd46beefc977441c06251cbf9502d0bdf18b89fc96fba24751b72e08a44a30f"
+content-hash = "5f37357e728935709124a325aa991e08f912b80804f5beaf837ca7338dc99b1d"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -985,8 +985,8 @@ google-cloud-pubsub = [
     {file = "google_cloud_pubsub-1.5.0-py2.py3-none-any.whl", hash = "sha256:fc19f029b942b59d9d13a0ee0014897a14f87dc0e695d07adeea88133ed414f5"},
 ]
 google-cloud-storage = [
-    {file = "google-cloud-storage-1.28.1.tar.gz", hash = "sha256:a7b5c326e7307a83fa1f1f0ef71aba9ad1f3a2bc6a768401e13fc02369fd8612"},
-    {file = "google_cloud_storage-1.28.1-py2.py3-none-any.whl", hash = "sha256:0b28536acab1d7e856a7a89bbfcad41f26f40b46af59786ca874ff0f94bbc0f9"},
+    {file = "google-cloud-storage-1.29.0.tar.gz", hash = "sha256:15c8ab11d17e3a32c154662bb001c2097515799f3fd4947a10b1fceb7b6e9a1e"},
+    {file = "google_cloud_storage-1.29.0-py2.py3-none-any.whl", hash = "sha256:958b4ec0ec0104ea2d436606a4d39eb6c5cf719b8b69d1676de75294bf02de3e"},
 ]
 google-resumable-media = [
     {file = "google-resumable-media-0.5.0.tar.gz", hash = "sha256:2a8fd188afe1cbfd5998bf20602f76b0336aa892de88fe842a806b9a3ed78d2a"},
