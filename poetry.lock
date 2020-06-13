@@ -265,14 +265,14 @@ description = "Google Cloud Pub/Sub API client library"
 name = "google-cloud-pubsub"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
-version = "1.5.0"
+version = "1.6.0"
 
 [package.dependencies]
 grpc-google-iam-v1 = ">=0.12.3,<0.13dev"
 
 [package.dependencies.google-api-core]
 extras = ["grpc"]
-version = ">=1.14.0,<1.17.0"
+version = ">=1.14.0,<1.17.0 || >=1.20.0"
 
 [[package]]
 category = "dev"
@@ -896,7 +896,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "b898efbc80a7d7e59c0abdb20232febbbe75ee3a92172297ebece8ed072acc9c"
+content-hash = "48584b06d4f3b2493d1aae631fa882a9c2351b580bb8dea093e320b6f35af5e1"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -981,8 +981,8 @@ google-cloud-logging = [
     {file = "google_cloud_logging-1.15.0-py2.py3-none-any.whl", hash = "sha256:d46f5f5c1d40f35fe42818962471f8d1735810e8e1fa5ee741355718bfdcab1d"},
 ]
 google-cloud-pubsub = [
-    {file = "google-cloud-pubsub-1.5.0.tar.gz", hash = "sha256:d396ae1938e966e1ac3b981d14db7b0f9fabab553b0876c3202e187e4b477ab6"},
-    {file = "google_cloud_pubsub-1.5.0-py2.py3-none-any.whl", hash = "sha256:fc19f029b942b59d9d13a0ee0014897a14f87dc0e695d07adeea88133ed414f5"},
+    {file = "google-cloud-pubsub-1.6.0.tar.gz", hash = "sha256:536da438998201620285489c8499a76e5c27d760f4d0a42486cd7138268ca60d"},
+    {file = "google_cloud_pubsub-1.6.0-py2.py3-none-any.whl", hash = "sha256:227829aa0b6534d6cf34b96c7d6cf5d3e9dbaf569253439e78caee857d83d0ca"},
 ]
 google-cloud-storage = [
     {file = "google-cloud-storage-1.29.0.tar.gz", hash = "sha256:15c8ab11d17e3a32c154662bb001c2097515799f3fd4947a10b1fceb7b6e9a1e"},
