@@ -9,7 +9,7 @@ license = "MIT"
 python = "^3.7"
 
 [tool.poetry.dev-dependencies]
-black = "^19.10b0"
+black = "^20.8b1"
 cloud-functions-utils = "^0.3.0"
 docker = "^4.2.2"
 google-cloud-bigquery = "^1.25.0"
